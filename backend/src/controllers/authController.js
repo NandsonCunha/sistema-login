@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import User from "../../models/userModel.js"
+import User from "../models/userModel.js"
 
 const UserAuthentication = async (req,res) => {
     try {
@@ -21,7 +21,7 @@ const UserAuthentication = async (req,res) => {
 
         return res.status(200).json({ 
             message: "Authenticated successfully!", 
-            user: { id: user.id, email: user.email },
+            user: { id: user.id, email: user.email, role: user.role },
             token,
         });
     } catch (error) {

@@ -1,18 +1,18 @@
 import express from 'express';
 import { UserController } from '../../controllers/userController.js';
 import { UserVerifyToken, isAdmin } from '../../services/middlewares/authMiddleware.js';
+import UserAuthentication from "../../controllers/authController.js"
 
 const router = express.Router();
 
-// Qualquer usuário autenticado
-router.get('/users', UserVerifyToken, UserController.listUsers);
+router.get('/getAll', UserVerifyToken, UserController.listUsers);
 
-// Apenas administradores
-router.post('/users', UserVerifyToken, isAdmin, UserController.createUser);
-router.delete('/users/:id', UserVerifyToken, isAdmin, UserController.deleteUser);
+router.post('/create', UserVerifyToken, isAdmin, UserController.createUser);
+router.delete('/delete/:id', UserVerifyToken, isAdmin, UserController.deleteUser);
 
-// Qualquer um autenticado pode consultar seu próprio dado
-router.get('/users/:id', UserVerifyToken, UserController.getOneUser);
-router.put('/users/:id', UserVerifyToken, UserController.updateUser);
+router.get('/getOne/:id', UserVerifyToken, UserController.getOneUser);
+router.put('/update/:id', UserVerifyToken, UserController.updateUser);
+
+router.post("/login", UserAuthentication)
 
 export default router;

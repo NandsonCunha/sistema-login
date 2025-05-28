@@ -98,4 +98,30 @@ export class UserController {
         return res.status(500).json({ error: "Erro ao tentar deletar o usuário." });
       }
     }
+
+    static async login(req, res) {
+        try {
+            const { email, password } = req.body;
+
+            const user = await User.findOne({ where: { email } });
+            if (!user) {
+                return res.status(400).json({ message: 'Usuário não encontrado' });
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Senha incorreta' });
+            }
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email},
+                JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+
+            return res.status(200).json({ message: 'Login bem-sucedido', token });
+        } catch (err) {
+            return res.status(500).json({ message: 'Erro ao processar login', error: err.message });
+        }
+      }
 }

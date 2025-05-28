@@ -1,19 +1,101 @@
-import User from "../models/User.js";
+import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 
-export async function listUsers(req, res) {
-  const users = await User.findAll();
-  res.json(users);
-}
+export class UserController {
+  static async createUser(req, res){
+    try {
+      const {name, email, password, role} = req.body;
 
-export async function updateUser(req, res) {
-  const { name, password } = req.body;
-  const hashed = await bcrypt.hash(password, 10);
-  await User.update({ name, password: hashed }, { where: { id: req.user.id } });
-  res.json({ message: "User updated" });
-}
+      const salt = await bcrypt.genSalt(10)
+      const hashPassword = await bcrypt.hash(password, salt)
 
-export async function deleteUser(req, res) {
-  await User.destroy({ where: { id: req.user.id } });
-  res.json({ message: "User deleted" });
+      const user = await User.create({
+        name: name,
+        email: email,
+        password: hashPassword,
+        role: role
+      })
+
+      return res.status(200).json({
+        message: 'User created sucessfully',
+      user})
+    } catch (error) {
+      console.error("Error creating User", error)
+      return res.status(500).json({error: 'Error creating User'})
+    }
+  }
+  static async listUsers(req, res) {
+    try {
+      const users = await User.findAll()
+
+      return res.status(200).json({users});
+    } catch (error) {
+      console.error('Error listing all Users', error)
+      return res.status(500).json({error: 'Error listing all Users'})
+    }
+  }
+
+  static async getOneUser(req, res){
+    try {
+      const user = await User.findByPk(req.params.id)
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found." });
+        }
+      return res.status(200).json({ user });
+    } catch (error) {
+      console.error('Error listing User', error)
+      return res.status(500).json({error: 'Error listing User'})
+    }
+  }
+
+  static async updateUser(req, res) {
+    try {
+        const { name, email, password } = req.body
+
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: "Usuário não encontrado." });
+        }
+
+        if(req.body?.name){
+            user.name = req.body.name
+        }
+        if(req.body?.email){
+            user.email = req.body.email
+        }
+        if(req.body?.password){
+            const salt = await bcrypt.genSalt(10)
+            user.password = await bcrypt.hash(password, salt)
+        }
+        if(req.body?.role){
+          user.role = req.body.role
+        }
+
+        await user.save();
+
+        return res.status(200).json({ message: "Usuário atualizado com sucesso!", user });
+    } catch (error) {
+        console.error("Erro ao atualizar 'Usuário'.", error);
+        return res.status(500).json({ error: "Erro ao tentar atualizar o usuário." });
+      }
+    }
+
+  static async deleteUser(req, res) {
+    try {
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: "Usuário não encontrado." });
+        }
+
+        await user.destroy();
+
+        return res.status(200).json({ message: "Usuário deletado com sucesso!" });
+    } catch (error) {
+        console.error("Erro ao deletar 'Usuário'.", error);
+        return res.status(500).json({ error: "Erro ao tentar deletar o usuário." });
+      }
+    }
 }

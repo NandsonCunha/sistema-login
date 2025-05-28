@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
-import sequelize from '../src/config/db.js';
+import sequelize from './config/DB.js';
 import router from '../src/routes/routes.js'
 
 const app = express();

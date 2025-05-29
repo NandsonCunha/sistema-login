@@ -47,14 +47,35 @@ Sistema de Geral de Login - Back End
 
 # Sistema Geral de Login - Frontend
 
-Landing page do projeto de gerenciamento da Exception Jr - Front End
+Este é o frontend de um sistema de autenticação de usuários. Ele oferece uma interface simples e moderna para que os usuários possam se cadastrar, fazer login e navegar entre as páginas de listagem e atualização de dados de usuários. O sistema é construído com React e utiliza requisições HTTP para se comunicar com a API no backend.
 
 
 ## Tecnologias Utilizadas
 
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-- [HTML](https://html.com/)
+- [React](https://react.dev/)
+- [Vite](https://vite.dev/)
 - [CSS]
 
-...
+
+### Como está organizado:
+```
+├── src/
+│   ├── assets/    # 
+│   ├── components/         # 
+│   ├── pages/         # 
+│   └── styles/       # 
+|- App.jsx
+```
+## Funcionalidades
+
+- Tela única com formulários de **login** e **cadastro**
+- Redirecionamento para as páginas de:
+  - Listagem de usuários
+  - Atualização de dados dos usuários
+- Armazenamento do token de autenticação no `localStorage`
+
+Rodar o projeto:
+    ```bash
+   npm run dev

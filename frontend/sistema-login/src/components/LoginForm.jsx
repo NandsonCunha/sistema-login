@@ -1,20 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/users/login", {
+      const res = await axios.post("http://localhost:3000/user/login", {
         email,
         password,
       });
 
       alert(res.data.message);
       localStorage.setItem("token", res.data.token);
+      
+      navigate("/home")
     } catch (err) {
       alert(err.response?.data?.error || "Erro no login");
     }

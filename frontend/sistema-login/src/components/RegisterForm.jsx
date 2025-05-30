@@ -9,11 +9,11 @@ export default function RegisterForm() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/users/create", {
+      await axios.post("http://localhost:3000/user/create", {
         name,
         email,
         password,
-        role: "user", // ou admin, se desejar
+        role: "user",
       });
 
       alert("Usuário cadastrado com sucesso!");

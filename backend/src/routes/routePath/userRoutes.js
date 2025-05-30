@@ -5,9 +5,9 @@ import UserAuthentication from "../../controllers/authController.js"
 
 const router = express.Router();
 
-router.get('/getAll', UserVerifyToken, UserController.listUsers);
+router.get('/listAll', UserVerifyToken, UserController.listUsers);
 
-router.post('/create', UserVerifyToken, isAdmin, UserController.createUser);
+router.post('/create', UserController.createUser);
 router.delete('/delete/:id', UserVerifyToken, isAdmin, UserController.deleteUser);
 
 router.get('/getOne/:id', UserVerifyToken, UserController.getOneUser);
